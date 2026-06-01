@@ -1,7 +1,7 @@
 """
-Streamlit Dashboard — Twitter Sentiment Analysis (Mental Health Topic)
+Streamlit Dashboard 
 
-Jalankan:
+Cara running dashboard:
     streamlit run dashboard/app.py
 """
 
@@ -13,13 +13,14 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 
-# ── Konfigurasi halaman ───────────────────────────────────────────────────────
+# Konfigurasi halaman
 st.set_page_config(
     page_title='Twitter Sentiment — Mental Health',
+    page_icon='',
     layout='wide',
 )
 
-# ── Konstanta ─────────────────────────────────────────────────────────────────
+# Konstanta
 PROCESSED_DIR = Path('datasets/processed')
 
 PAL = {'Positive': '#00C896', 'Neutral': '#4A9EFF', 'Negative': '#FF5A5A'}
@@ -31,7 +32,7 @@ DARK_LAYOUT = dict(
 )
 
 
-# ── Fungsi load data ──────────────────────────────────────────────────────────
+# Fungsi load data
 @st.cache_data
 def load_data() -> tuple[pd.DataFrame, dict, dict, dict]:
     """Muat semua dataset dari folder processed."""
@@ -49,20 +50,20 @@ def load_data() -> tuple[pd.DataFrame, dict, dict, dict]:
     return df, top_hashtags, ab_results, assessment
 
 
-# ── Load data ─────────────────────────────────────────────────────────────────
+# Load data
 try:
     df, top_hashtags, ab_results, assessment = load_data()
 except FileNotFoundError as e:
-    st.error(f'❌ File tidak ditemukan: {e}\nJalankan `01_data_wrangling.ipynb` terlebih dahulu.')
+    st.error(f' File tidak ditemukan: {e}\nJalankan `01_data_wrangling.ipynb` terlebih dahulu.')
     st.stop()
 
 
-# ── Header ────────────────────────────────────────────────────────────────────
-st.title('🧠 Twitter Sentiment Analysis')
-st.caption('Mental Health Topic — Dashboard Analitik')
+# Header
+st.title('Twitter Sentiment Analysis')
+st.caption('Dashboard untuk analisis sentimen Twitter dengan topik kesehatan mental.\n')
 st.divider()
 
-# ── Metrik Utama ──────────────────────────────────────────────────────────────
+# Metrik Utama
 col1, col2, col3, col4 = st.columns(4)
 
 dist = df['sentiment'].value_counts()
@@ -74,13 +75,13 @@ col4.metric('Sentimen Positif', f"{dist.get('Positive', 0):,}", f"{dist.get('Pos
 
 st.divider()
 
-# ── Tab ───────────────────────────────────────────────────────────────────────
+# Tab 
 tab_eda, tab_hashtag, tab_ab, tab_data = st.tabs(
-    ['📊 EDA', '# Hashtag', '🧪 A/B Testing', '📄 Data']
+    ['EDA', 'Hashtag', 'A/B Testing', 'Data']
 )
 
 
-# ── Tab 1: EDA ────────────────────────────────────────────────────────────────
+# Tab 1: EDA
 with tab_eda:
     st.subheader('Distribusi Sentimen')
 
@@ -98,28 +99,25 @@ with tab_eda:
         st.plotly_chart(fig_pie, use_container_width=True)
 
     with col_bar:
-        raw_numeric_cols = [c for c in ['text_length', 'hashtag_count'] if c in df.columns]
-
-        if raw_numeric_cols:
-            feature = st.selectbox('Pilih fitur untuk distribusi:', raw_numeric_cols)
-            fig_hist = px.histogram(
-                df, x=feature, color='sentiment',
-                color_discrete_map=PAL, barmode='overlay', opacity=0.6,
-                nbins=50,
-            )
-            fig_hist.update_layout(**DARK_LAYOUT)
-            st.plotly_chart(fig_hist, use_container_width=True)
-        else:
-            st.info('Tidak ada kolom numerik raw yang tersedia.')
+        feature = st.selectbox(
+            'Pilih fitur untuk distribusi:',
+            ['word_count', 'text_length_clean', 'hashtag_count', 'hashtag_density'],
+        )
+        fig_hist = px.histogram(
+            df, x=feature, color='sentiment',
+            color_discrete_map=PAL, barmode='overlay', opacity=0.6,
+            nbins=50,
+        )
+        fig_hist.update_layout(**DARK_LAYOUT)
+        st.plotly_chart(fig_hist, use_container_width=True)
 
     st.subheader('Statistik Deskriptif per Sentimen')
-    raw_stat_cols = [c for c in ['text_length', 'hashtag_count'] if c in df.columns]
-    if raw_stat_cols:
-        stats_table = df.groupby('sentiment')[raw_stat_cols].mean().round(3)
-        st.dataframe(stats_table, use_container_width=True)
+    feature_cols = ['word_count', 'text_length_clean', 'hashtag_count', 'hashtag_density', 'avg_word_len']
+    stats_table = df.groupby('sentiment')[feature_cols].mean().round(3)
+    st.dataframe(stats_table, use_container_width=True)
 
 
-# ── Tab 2: Hashtag ────────────────────────────────────────────────────────────
+# Tab 2: Hashtag
 with tab_hashtag:
     st.subheader('Top 20 Hashtag per Sentimen')
 
@@ -148,12 +146,12 @@ with tab_hashtag:
                 'dalam tweet bersentimen negatif — kemungkinan besar digunakan secara ironis.')
 
 
-# ── Tab 3: A/B Testing ────────────────────────────────────────────────────────
+# Tab 3: A/B Testing
 with tab_ab:
     st.subheader('Hasil Uji Statistik')
 
     for key, result in ab_results.items():
-        with st.expander(f"{'✅' if result['significant'] else '❌'} {result['metric']} — {result['test']}"):
+        with st.expander(f"{'' if result['significant'] else ''} {result['metric']} — {result['test']}"):
             col_info, col_verdict = st.columns([2, 1])
 
             with col_info:
@@ -176,7 +174,7 @@ with tab_ab:
                     st.warning('Tidak Signifikan\n\nGagal Tolak H₀')
 
 
-# ── Tab 4: Data ───────────────────────────────────────────────────────────────
+# Tab 4: Data
 with tab_data:
     st.subheader('Preview Dataset Bersih')
 
