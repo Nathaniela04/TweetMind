@@ -1,0 +1,62 @@
+{
+  "hashtag_count_pos_neg": {
+    "test": "Mann-Whitney U",
+    "metric": "Hashtag Count",
+    "group_a": "Positive",
+    "group_b": "Negative",
+    "mean_a": 3.728,
+    "mean_b": 5.247,
+    "statistic": 2713476.0,
+    "pvalue": 2.0328715216878869e-13,
+    "significant": true,
+    "h0": "Tidak ada perbedaan hashtag count antara Positive dan Negative"
+  },
+  "text_length_pos_neg": {
+    "test": "Mann-Whitney U",
+    "metric": "Text Length (Pos vs Neg)",
+    "group_a": "Positive",
+    "group_b": "Negative",
+    "mean_a": 180.03,
+    "mean_b": 182.05,
+    "statistic": 3088198.0,
+    "pvalue": 0.7164149983321214,
+    "significant": false,
+    "h0": "Tidak ada perbedaan text length antara Positive dan Negative"
+  },
+  "hashtag_count_all": {
+    "test": "Kruskal-Wallis",
+    "metric": "Hashtag Count (semua sentimen)",
+    "groups": [
+      "Positive",
+      "Neutral",
+      "Negative"
+    ],
+    "means": [
+      3.728,
+      3.74,
+      5.247
+    ],
+    "statistic": 101.0605,
+    "pvalue": 1.1349741043071143e-22,
+    "significant": true,
+    "h0": "Tidak ada perbedaan hashtag count antar ketiga sentimen"
+  },
+  "text_length_all": {
+    "test": "Kruskal-Wallis",
+    "metric": "Text Length (semua sentimen)",
+    "groups": [
+      "Positive",
+      "Neutral",
+      "Negative"
+    ],
+    "means": [
+      180.03,
+      179.21,
+      182.05
+    ],
+    "statistic": 1.0408,
+    "pvalue": 0.5942910514358204,
+    "significant": false,
+    "h0": "Tidak ada perbedaan text length antar ketiga sentimen"
+  }
+}
