@@ -93,7 +93,6 @@ with tab_eda:
             color=dist.index,
             color_discrete_map=PAL,
             hole=0.4,
-            )
         )
         fig_pie.update_traces(
             textinfo='percent',
