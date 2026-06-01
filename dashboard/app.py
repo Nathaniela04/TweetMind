@@ -59,7 +59,7 @@ except FileNotFoundError as e:
 
 # ── Header ────────────────────────────────────────────────────────────────────
 st.title('Twitter Sentiment Analysis')
-st.caption('Mental Health Topic — Dashboard Analitik')
+st.caption('Dashboard untuk analisis sentimen Twitter dengan topik kesehatan mental')
 st.divider()
 
 # ── Metrik Utama ──────────────────────────────────────────────────────────────
