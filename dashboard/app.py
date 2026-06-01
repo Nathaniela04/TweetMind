@@ -93,6 +93,14 @@ with tab_eda:
             color=dist.index,
             color_discrete_map=PAL,
             hole=0.4,
+            )
+        )
+        fig_pie.update_traces(
+            textinfo='percent',
+            textfont=dict(
+            color='white',
+            size=18
+            )
         )
         fig_pie.update_layout(**DARK_LAYOUT, showlegend=True)
         st.plotly_chart(fig_pie, use_container_width=True)
